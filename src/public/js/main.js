@@ -21,6 +21,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // Ensure CSS is applied after HTMX content swaps
+  document.body.addEventListener('htmx:afterSwap', function(event) {
+    // Force a reflow to ensure styles are applied
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      // This forces the browser to reapply styles
+      void mainContent.offsetHeight;
+    }
+
+    // Ensure all skill badges and other elements have proper styling
+    const skillBadges = document.querySelectorAll('.skill-badge');
+    skillBadges.forEach(badge => {
+      // Ensure Tailwind classes are applied
+      badge.classList.add('px-3', 'py-1', 'rounded-full', 'text-sm', 'font-medium', 'bg-dark-600', 'text-gray-300', 'hover:bg-primary-700', 'hover:text-white', 'transition-colors', 'duration-200');
+    });
+  });
+
   // Add scroll animation
   const scrollLinks = document.querySelectorAll('a[href^="#"]');
   scrollLinks.forEach(link => {

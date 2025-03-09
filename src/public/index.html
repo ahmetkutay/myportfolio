@@ -20,6 +20,85 @@
   <!-- HTMX -->
   <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
 
+  <!-- HTMX Configuration -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ensure styles are preserved during HTMX swaps
+      htmx.config.includeIndicatorStyles = false; // Disable default indicator styles
+
+      // Handle page load based on URL
+      function handleInitialPageLoad() {
+        const path = window.location.pathname;
+        const hash = window.location.hash;
+
+        // If we're on a partial route, load the appropriate content
+        if (path.startsWith('/partials/')) {
+          const partialName = path.split('/').pop();
+          if (partialName) {
+            const url = `/partials/${partialName}`;
+            htmx.ajax('GET', url, {target: '#main-content', swap: 'innerHTML'});
+          }
+        }
+        // If we have a hash, load the appropriate content
+        else if (hash && hash.startsWith('#')) {
+          const section = hash.substring(1); // Remove the # character
+          if (['experience', 'projects', 'skills', 'education', 'contact'].includes(section)) {
+            const url = `/partials/${section}`;
+            htmx.ajax('GET', url, {target: '#main-content', swap: 'innerHTML'});
+          }
+        }
+      }
+
+      // Run on initial page load
+      handleInitialPageLoad();
+
+      // Add event listener to ensure styles are applied after content swap
+      document.body.addEventListener('htmx:afterSwap', function(event) {
+        // Force a reflow to ensure styles are applied
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+          // This forces the browser to reapply styles
+          void mainContent.offsetHeight;
+        }
+
+        // Apply Tailwind classes to common elements that might be missing styles
+        const applyTailwindClasses = () => {
+          // Skill badges
+          document.querySelectorAll('.skill-badge').forEach(badge => {
+            badge.classList.add('px-3', 'py-1', 'rounded-full', 'text-sm', 'font-medium', 'bg-dark-600', 'text-gray-300', 'hover:bg-primary-700', 'hover:text-white', 'transition-colors', 'duration-200');
+          });
+
+          // Cards
+          document.querySelectorAll('.card').forEach(card => {
+            card.classList.add('bg-dark-700', 'rounded-xl', 'p-6', 'shadow-lg', 'hover:shadow-xl', 'transition-all', 'duration-300');
+          });
+
+          // Buttons
+          document.querySelectorAll('.btn').forEach(btn => {
+            btn.classList.add('px-6', 'py-2', 'rounded-md', 'font-medium', 'transition-all', 'duration-200', 'inline-flex', 'items-center', 'justify-center');
+          });
+
+          document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.classList.add('bg-primary-600', 'hover:bg-primary-700', 'text-white');
+          });
+
+          document.querySelectorAll('.btn-outline').forEach(btn => {
+            btn.classList.add('border-2', 'border-primary-500', 'text-primary-400', 'hover:bg-primary-500/10');
+          });
+
+          // Section headers
+          document.querySelectorAll('.text-gradient').forEach(text => {
+            text.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-r', 'from-primary-400', 'to-secondary-400');
+          });
+        };
+
+        // Apply classes immediately and after a short delay to ensure they're applied
+        applyTailwindClasses();
+        setTimeout(applyTailwindClasses, 50);
+      });
+    });
+  </script>
+
   <!-- Alpine.js (for minimal JS interactions) -->
   <script defer src="https://unpkg.com/alpinejs@3.13.0/dist/cdn.min.js"></script>
 
@@ -53,11 +132,11 @@
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex items-center space-x-1">
           <a href="/" class="nav-link-active">Home</a>
-          <a href="#experience" class="nav-link" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">Experience</a>
-          <a href="#projects" class="nav-link" hx-get="/partials/projects" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">Projects</a>
-          <a href="#skills" class="nav-link" hx-get="/partials/skills" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">Skills</a>
-          <a href="#education" class="nav-link" hx-get="/partials/education" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">Education</a>
-          <a href="#contact" class="nav-link" hx-get="/partials/contact" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">Contact</a>
+          <a href="#experience" class="nav-link" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">Experience</a>
+          <a href="#projects" class="nav-link" hx-get="/partials/projects" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">Projects</a>
+          <a href="#skills" class="nav-link" hx-get="/partials/skills" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">Skills</a>
+          <a href="#education" class="nav-link" hx-get="/partials/education" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">Education</a>
+          <a href="#contact" class="nav-link" hx-get="/partials/contact" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">Contact</a>
         </nav>
 
         <!-- Mobile Menu Button -->
@@ -104,11 +183,11 @@
             @click.away="open = false"
           >
             <a href="/" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" @click="open = false">Home</a>
-            <a href="#experience" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true" @click="open = false">Experience</a>
-            <a href="#projects" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/projects" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true" @click="open = false">Projects</a>
-            <a href="#skills" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/skills" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true" @click="open = false">Skills</a>
-            <a href="#education" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/education" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true" @click="open = false">Education</a>
-            <a href="#contact" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/contact" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true" @click="open = false">Contact</a>
+            <a href="#experience" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML" @click="open = false">Experience</a>
+            <a href="#projects" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/projects" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML" @click="open = false">Projects</a>
+            <a href="#skills" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/skills" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML" @click="open = false">Skills</a>
+            <a href="#education" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/education" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML" @click="open = false">Education</a>
+            <a href="#contact" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-600 hover:text-white" hx-get="/partials/contact" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML" @click="open = false">Contact</a>
           </div>
         </button>
       </div>
@@ -135,13 +214,13 @@
             Full-stack Software Developer & DevOps Engineer
           </p>
           <div class="flex flex-wrap justify-center gap-4">
-            <a href="#experience" class="btn btn-primary" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">
+            <a href="#experience" class="btn btn-primary" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">
               View My Work
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </a>
-            <a href="#contact" class="btn btn-outline" hx-get="/partials/contact" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">
+            <a href="#contact" class="btn btn-outline" hx-get="/partials/contact" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">
               Contact Me
             </a>
           </div>
@@ -237,7 +316,7 @@
               </div>
 
               <div class="mt-8 text-center">
-                <a href="#experience" class="btn btn-primary" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML transition:true">
+                <a href="#experience" class="btn btn-primary" hx-get="/partials/experience" hx-target="#main-content" hx-push-url="true" hx-swap="innerHTML">
                   View My Experience
                 </a>
               </div>

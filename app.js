@@ -33,6 +33,13 @@ app.use(express.static(path.join(__dirname, 'src/public'), {
     }
   }
 }));
+
+// Special route for partials CSS to ensure it's always fresh
+app.get('/partials-styles.css', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store'); // Prevent caching
+  res.sendFile(path.join(__dirname, 'src/public/partials-styles.css'));
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -41,23 +48,58 @@ app.use('/api', apiRoutes);
 
 // HTML Partials Routes - These will be loaded via HTMX
 app.get('/partials/experience', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src/public/partials/experience.html'));
+  // Check if this is a direct browser request or an HTMX request
+  if (req.headers['hx-request']) {
+    res.setHeader('Cache-Control', 'no-store'); // Prevent caching
+    res.sendFile(path.join(__dirname, 'src/public/partials/experience.html'));
+  } else {
+    // If it's a direct browser request (page reload), serve the index.html
+    res.sendFile(path.join(__dirname, 'src/public/index.html'));
+  }
 });
 
 app.get('/partials/projects', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src/public/partials/projects.html'));
+  // Check if this is a direct browser request or an HTMX request
+  if (req.headers['hx-request']) {
+    res.setHeader('Cache-Control', 'no-store'); // Prevent caching
+    res.sendFile(path.join(__dirname, 'src/public/partials/projects.html'));
+  } else {
+    // If it's a direct browser request (page reload), serve the index.html
+    res.sendFile(path.join(__dirname, 'src/public/index.html'));
+  }
 });
 
 app.get('/partials/skills', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src/public/partials/skills.html'));
+  // Check if this is a direct browser request or an HTMX request
+  if (req.headers['hx-request']) {
+    res.setHeader('Cache-Control', 'no-store'); // Prevent caching
+    res.sendFile(path.join(__dirname, 'src/public/partials/skills.html'));
+  } else {
+    // If it's a direct browser request (page reload), serve the index.html
+    res.sendFile(path.join(__dirname, 'src/public/index.html'));
+  }
 });
 
 app.get('/partials/education', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src/public/partials/education.html'));
+  // Check if this is a direct browser request or an HTMX request
+  if (req.headers['hx-request']) {
+    res.setHeader('Cache-Control', 'no-store'); // Prevent caching
+    res.sendFile(path.join(__dirname, 'src/public/partials/education.html'));
+  } else {
+    // If it's a direct browser request (page reload), serve the index.html
+    res.sendFile(path.join(__dirname, 'src/public/index.html'));
+  }
 });
 
 app.get('/partials/contact', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src/public/partials/contact.html'));
+  // Check if this is a direct browser request or an HTMX request
+  if (req.headers['hx-request']) {
+    res.setHeader('Cache-Control', 'no-store'); // Prevent caching
+    res.sendFile(path.join(__dirname, 'src/public/partials/contact.html'));
+  } else {
+    // If it's a direct browser request (page reload), serve the index.html
+    res.sendFile(path.join(__dirname, 'src/public/index.html'));
+  }
 });
 
 // Main route - serve the index.html file
@@ -67,7 +109,14 @@ app.get('/', (req, res) => {
 
 // Catch-all route to redirect to home
 app.get('*', (req, res) => {
-  res.redirect('/');
+  // Check if the path starts with /partials but isn't one of our defined routes
+  if (req.path.startsWith('/partials/')) {
+    // For any other /partials/* routes, serve index.html
+    res.sendFile(path.join(__dirname, 'src/public/index.html'));
+  } else {
+    // For any other routes, redirect to home
+    res.redirect('/');
+  }
 });
 
 // Start server
