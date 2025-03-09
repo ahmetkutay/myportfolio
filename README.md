@@ -1,36 +1,163 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Ahmet Kutay Karacair - Portfolio Website
+
+A modern, elegant portfolio website built with HTMX, Express.js, and TailwindCSS.
+
+## Features
+
+- Modern and elegant UI design
+- Responsive layout for all device sizes
+- Interactive elements using HTMX
+- Smooth page transitions
+- Contact form with HTMX integration
+- Optimized performance
+
+## Tech Stack
+
+- **Frontend**:
+  - HTML with HTMX for interactivity
+  - TailwindCSS for styling
+  - Alpine.js for minimal client-side interactivity
+
+- **Backend**:
+  - Express.js
+  - Node.js
+
+## Project Structure
+
+```
+/
+├── app.js                 # Main application file
+├── package.json           # Dependencies and scripts
+├── tailwind.config.js     # TailwindCSS configuration
+├── Dockerfile             # Docker configuration
+├── docker-compose.yml     # Docker Compose configuration
+├── src/
+│   ├── public/            # Static assets and HTML files
+│   │   ├── images/        # Image assets
+│   │   ├── js/            # JavaScript files
+│   │   │   └── main.js    # Main JavaScript file
+│   │   ├── partials/      # HTML partials loaded via HTMX
+│   │   │   ├── contact.html
+│   │   │   ├── education.html
+│   │   │   ├── experience.html
+│   │   │   ├── projects.html
+│   │   │   └── skills.html
+│   │   ├── index.html     # Main HTML file
+│   │   └── styles.css     # Compiled CSS
+│   ├── static/
+│   │   ├── css/           # CSS source files
+│   │   │   └── input.css  # TailwindCSS input file
+│   │   └── js/            # JavaScript source files
+│   │       └── main.js    # Main JavaScript source file
+│   └── server/            # Server-side code
+│       └── api.js         # API routes
+└── README.md              # Project documentation
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/portfolio.git
+   cd portfolio
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Build the CSS:
+   ```bash
+   npm run build:css
+   # or
+   yarn build:css
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. Open your browser and navigate to `http://localhost:3000`
+
+### Using Docker
+
+#### Development
+
+To run the development environment with Docker:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker-compose up dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the application in development mode with hot-reloading enabled.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Production
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To run the production environment with Docker:
 
-## Learn More
+```bash
+docker-compose up portfolio
+```
 
-To learn more about Next.js, take a look at the following resources:
+Or build and run using the Dockerfile:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Build the Docker image
+docker build -t kutay-portfolio .
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Run the container
+docker run -p 3000:3000 kutay-portfolio
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project can be deployed to any hosting service that supports Node.js applications or Docker containers, such as:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Heroku
+- Vercel
+- Netlify
+- DigitalOcean
+- AWS
+- Google Cloud Run
+- Azure App Service
+
+### Docker Deployment
+
+For platforms that support Docker deployments:
+
+1. Build the Docker image:
+   ```bash
+   docker build -t kutay-portfolio .
+   ```
+
+2. Push to a container registry (example with Docker Hub):
+   ```bash
+   docker tag kutay-portfolio yourusername/kutay-portfolio
+   docker push yourusername/kutay-portfolio
+   ```
+
+3. Deploy the container on your preferred platform following their specific instructions.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [HTMX](https://htmx.org/) - For the interactive UI
+- [TailwindCSS](https://tailwindcss.com/) - For the styling
+- [Express.js](https://expressjs.com/) - For the backend
+- [Alpine.js](https://alpinejs.dev/) - For minimal client-side interactivity

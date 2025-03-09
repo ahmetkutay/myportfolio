@@ -1,13 +1,20 @@
 version: '3.8'
 
 services:
-  app:
-    image: node:latest
-    working_dir: /app
-    volumes:
-      - .:/app
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kutay-portfolio
     environment:
-      PORT: 3000
+      - NODE_ENV=production
+      - PORT=3000
     ports:
       - "3000:3000"
-    command: sh -c "npm install && npm run build && npm start"
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
