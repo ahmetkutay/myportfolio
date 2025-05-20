@@ -90,7 +90,7 @@ A modern, elegant portfolio website built with HTMX, Express.js, and TailwindCSS
    yarn dev
    ```
 
-5. Open your browser and navigate to `http://localhost:3000`
+5. Open your browser and navigate to `http://localhost:3001`
 
 ### Using Docker
 
@@ -119,7 +119,7 @@ Or build and run using the Dockerfile:
 docker build -t kutay-portfolio .
 
 # Run the container
-docker run -p 3000:3000 kutay-portfolio
+docker run -p 3001:3001 kutay-portfolio
 ```
 
 ## Deployment

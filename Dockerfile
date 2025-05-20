@@ -22,7 +22,7 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-ENV PORT 3000
+ENV PORT 3001
 
 # Copy necessary files from builder stage
 COPY --from=builder /app/app.js ./
@@ -41,9 +41,9 @@ USER appuser
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-  CMD wget --spider -q http://localhost:3000 || exit 1
+  CMD wget --spider -q http://localhost:3001 || exit 1
 
-EXPOSE 3000
+EXPOSE 3001
 
 # Start the app
 CMD ["node", "app.js"]

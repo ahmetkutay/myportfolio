@@ -12,4 +12,4 @@ docker-compose up -d --build
 echo "Container status:"
 docker-compose ps
 
-echo "Deployment complete! Your application is running at http://localhost:3000"
+echo "Deployment complete! Your application is running at http://localhost:3001"
