@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "build:css": "tailwindcss -i src/static/css/input.css -o src/public/styles.css --watch"
+    "build:css": "tailwindcss -i src/static/css/input.css -o src/public/styles.css"
   },
   "keywords": [
     "portfolio",
